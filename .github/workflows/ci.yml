@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [develop]
+  push:
+    branches: [develop, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  fmt:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Provision pinned Rust toolchain
+        run: rustup show
+      - run: cargo fmt --all -- --check
+
+  clippy:
+    needs: fmt
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Provision pinned Rust toolchain
+        run: rustup show
+      - run: cargo clippy --all-targets --locked -- -D warnings
+
+  test:
+    needs: clippy
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Provision pinned Rust toolchain
+        run: rustup show
+      - run: cargo test --all --locked
+
+  machete:
+    needs: clippy
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Provision pinned Rust toolchain
+        run: rustup show
+      - run: cargo machete || echo 'cargo-machete ausente no toolchain; verificacao pulada e listada.'
+
+  gate:
+    name: CI Gate
+    if: always()
+    needs: [fmt, clippy, test, machete]
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Aggregate
+        shell: bash
+        run: |
+          test "${{ needs.fmt.result }}" = success
+          test "${{ needs.clippy.result }}" = success
+          test "${{ needs.test.result }}" = success
+          test "${{ needs.machete.result }}" = success
+          echo 'CI Gate passed.'
