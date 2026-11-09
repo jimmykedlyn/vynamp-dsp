@@ -30,6 +30,16 @@ cargo test
 The agent contract is the umbrella's:
 [AGENTS.md](https://github.com/jimmykedlyn/vynamp/blob/develop/AGENTS.md).
 
+## CI
+
+GitHub Actions is the only CI (ADR-014).
+[`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs `fmt`, `clippy`, `test` and
+`machete` on every pull request to `develop`, and the job `gate` publishes the required
+status **`CI Gate`**. It runs with `if: always()` and reads `needs.*.result`, so a dependency
+that fails, is cancelled or never reports fails the gate — there is no path to a green gate
+without the real checks. Actions are pinned by full commit SHA; a floating tag is an
+unreviewed dependency.
+
 # Português — vynamp-dsp
 
 [English](#vynamp-dsp) · **Português**
@@ -61,3 +71,13 @@ cargo test
 
 O contrato do agente é o do umbrella:
 [AGENTS.md](https://github.com/jimmykedlyn/vynamp/blob/develop/AGENTS.md).
+
+## CI
+
+O GitHub Actions é a única CI (ADR-014). O
+[`.github/workflows/ci.yml`](.github/workflows/ci.yml) roda `fmt`, `clippy`, `test` e
+`machete` em todo pull request para `develop`, e o job `gate` publica o status exigido
+**`CI Gate`**. Ele roda com `if: always()` e lê `needs.*.result`, então uma dependência que
+falha, é cancelada ou nunca reporta reprova o gate — não há caminho para um gate verde sem
+as verificações reais. As actions são fixadas por SHA completo de commit; uma tag flutuante
+é dependência não revisada.
