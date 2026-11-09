@@ -40,8 +40,8 @@ Spike da lib própria de resampling (ADR-011), PCM24/32 packing e ADR de qualida
 
 | ID | Given | When | Then |
 |---|---|---|---|
-| `TASK-E04-02-AC-1` | PENDENTE | PENDENTE | Impulse/sweep e alias/CPU/latência registrados |
-| `TASK-E04-02-AC-2` | PENDENTE | PENDENTE | integer bypass sample-exact e dither só ao reduzir precisão. |
+| `TASK-E04-02-AC-1` | o spike do resampler próprio nos modos balanced e high, com razão inteira e não inteira | um impulso e um sweep logarítmico passam por cada configuração e o alias, o CPU e a latência são medidos | Impulse/sweep e alias/CPU/latência registrados |
+| `TASK-E04-02-AC-2` | PCM24 e PCM32 na mesma taxa da fonte, e um caso que reduz de 32 para 16 bits | o caminho de bypass inteiro e o caminho com dither são executados e comparados bit a bit | integer bypass sample-exact e dither só ao reduzir precisão. |
 
 ## Verificação
 
