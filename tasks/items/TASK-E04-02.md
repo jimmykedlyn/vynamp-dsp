@@ -10,7 +10,7 @@
 | Módulo dono | `vynamp-dsp` |
 | Repo | `jimmykedlyn/vynamp-dsp` |
 | REQ coberto | `REQ-E04-02` |
-| Critérios da spec | pendente — `specs/d.md` §5 |
+| Critérios da spec | pendente — `specs/dsp.md` §5 |
 | Fase | M0 |
 | Prioridade | P0 |
 | Estado | planned |
