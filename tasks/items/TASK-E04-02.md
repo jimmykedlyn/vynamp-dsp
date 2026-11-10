@@ -62,4 +62,28 @@ Spike da lib própria de resampling (ADR-011), PCM24/32 packing e ADR de qualida
 - [ ] PR aberto com template preenchido; CI Gate verde no SHA final
 ## Notas de execução
 
-Preenchido durante a execução, não antes.
+Medido em 2026-11-09. **Esta TASK não foi executada: não havia o que executar.**
+
+| Medição | Resultado |
+|---|---|
+| Tamanho do repo | `wc -l src/*.rs` → **6 linha(s)**, contendo só `pub const VERSION` e o comentário de módulo. `src/` tem 1 arquivo(s) |
+| Worktree suja? | Não: `git status --short` limpo antes da medição |
+| Especificação do módulo | `libs/dsp/specs/dsp.md` — **esqueleto — §3 a §10 pendentes de autoria** |
+
+O critério de aceite abaixo exige o spike do resampler próprio (modos balanced/high, razão inteira e não inteira, impulso e sweep com alias/CPU/latência medidos) e o caminho de bypass inteiro sample-exact contra o caminho com dither. Nenhum dos dois existe neste
+repositório: não há código para compilar, medir, interromper ou comparar bit a bit.
+Registrar uma nota de execução dizendo que o critério foi verificado seria falsear
+a evidência — então a TASK permanece `planned` e esta nota registra o motivo
+medido, não um resultado.
+
+**Por que o motivo é o repo vazio e não uma limitação de ambiente:** uma limitação
+de ambiente (hardware ausente, linker ausente) aparece como comando que falha. Aqui
+os comandos não têm alvo: não há função a chamar, nenhum crate de terceiro no
+`[dependencies]` para exercer. O que falta é implementação.
+
+**O que destrava:** escrever o resampler e o dither em `libs/dsp` a partir de ADR-011 e do catálogo de DSP; a spec `specs/dsp.md` precisa sair do estado de esqueleto primeiro, porque §3 a §10 (contrato, formatos, limites) não existem para implementar contra
+
+**Custo de registrar assim:** se o mantenedor esperava que o spike M0 desta TASK
+fosse escrito nesta rodada do passo 42, ele não foi — o passo 42 mede e registra o
+estado, não implementa. Nenhum estado mudou: `tasks/backlog.json` continua com esta
+TASK em `planned`.
