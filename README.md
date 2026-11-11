@@ -14,6 +14,8 @@ dither, channel mapping, mixer, gain and crossfade.
 > Channel mapping, mixer, gain and crossfade are **not** implemented, and no audio
 > device has been touched — CPU and latency are bench wall-clock over buffers.
 
+**Specs:** every file in [`specs/`](specs/) is at v0.2.0, an authored draft not yet approved by the maintainer. No number in them is a contract until it is approved.
+
 Licence: `MIT OR Apache-2.0` — see [LICENSE](LICENSE), [LICENSE-MIT](LICENSE-MIT) and
 [LICENSE-APACHE](LICENSE-APACHE).
 Security: [GitHub Security Advisories](https://github.com/jimmykedlyn/vynamp-dsp/security/advisories/new)
@@ -60,6 +62,8 @@ dither, mapeamento de canal, mixer, ganho e crossfade.
 > [TASK-E04-02](https://github.com/jimmykedlyn/vynamp/blob/develop/evidence/PR/task-e04-02/README.md).
 > Mapa de canais, mixer, ganho e crossfade **não** estão implementados, e nenhum
 > dispositivo de áudio foi tocado — CPU e latência são wall-clock de bancada.
+
+**Specs:** todos os arquivos em [`specs/`](specs/) estão em v0.2.0, rascunho autorado ainda não aprovado pelo mantenedor. Nenhum número neles é contrato antes da aprovação.
 
 Licença: `MIT OR Apache-2.0` — ver [LICENSE](LICENSE), [LICENSE-MIT](LICENSE-MIT) e
 [LICENSE-APACHE](LICENSE-APACHE).
