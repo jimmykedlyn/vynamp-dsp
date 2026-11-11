@@ -42,7 +42,8 @@ Spike da lib própria de resampling (ADR-011), PCM24/32 packing e ADR de qualida
   playback é `TASK-E04-01` (engine); aqui só entram resampler, packing PCM24/32 e dither.
 - **Não** aprova a spec do módulo. `specs/dsp.md` segue em "esqueleto — §3 a §10
   pendentes de autoria", e medir um spike não move o estado para `aprovada`: quem
-  aprova o §5 é o mantenedor, não a evidência desta TASK.
+  aprova o §5 é o mantenedor, conforme `GOVERNANCE.md` §"Changing this document",
+  e a evidência desta TASK não substitui essa decisão.
 
 ## Antes de começar
 
