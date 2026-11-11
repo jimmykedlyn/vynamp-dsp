@@ -63,8 +63,8 @@ Spike da lib própria de resampling (ADR-011), PCM24/32 packing e ADR de qualida
 
 | Item | Comando / fixture | Evidência esperada |
 |---|---|---|
-| Teste automatizado | `cargo test --all --locked` no repo `vynamp-dsp` | hoje `0 passed` em 2 suites (lib e doctests), com exit 0 — verde vazio, que **não** é a evidência de AC-1 nem AC-2. A evidência da TASK é o spike escrever os testes de impulso, sweep, alias, CPU e latência e o de bypass inteiro contra dither; só então o `CI Gate` de `.github/workflows/ci.yml` passa a significar algo |
-| Oráculo independente | para AC-1, resposta em frequência medida por DFT da saída do sweep contra a resposta analítica do filtro, e posição dos picos de alias fora da banda de passagem; para AC-2, uma rampa inteira em que o frame `f` carrega `start + step * f`, de modo que um bypass que borre ou reordene uma amostra apareça como valor fora da rampa — o `ChannelRamp` de `vynamp-output` é a mesma ideia, mas é de outro repo e não é importável aqui (o §2 da spec proíbe qualquer crate `vynamp-*`) | comparação numérica com tolerância declarada por caso, e igualdade bit a bit no bypass inteiro; nenhum dos dois existe hoje, porque não há função a medir |
+| Teste automatizado | `cargo test --all --locked` no repo `vynamp-dsp` | `21 passed, 0 failed, 6 suites` em 2026-11-11, sem `#[ignore]`. Os testes existem: impulso, sweep, alias, ripple, latência, divisão de bloco (`tests/resample.rs`), bypass inteiro, TPDF, saturação e rampa (`tests/convert.rs`), alocação zero e o controle do contador (`tests/allocation.rs`). O `CI Gate` deixou de ser verde vazio |
+| Oráculo independente | para AC-1, resposta em frequência medida por Goertzel no bin exato contra a resposta analítica do filtro, e posição dos picos de alias fora da banda de passagem; para AC-2, uma rampa inteira em que o frame `f` carrega `start + step * f`, de modo que um bypass que borre ou reordene uma amostra apareça como valor fora da rampa — o `ChannelRamp` de `vynamp-output` é a mesma ideia, mas é de outro repo e não é importável aqui (o §2 da spec proíbe qualquer crate `vynamp-*`) | comparação numérica com tolerância declarada por caso, e igualdade bit a bit no bypass inteiro; ambos existem e são os que os testes de 2026-11-11 usam |
 | Hardware | nenhum dispositivo de áudio é tocado: a lib é `std` puro, sem `[dependencies]`, e o resampler é aritmética sobre buffer | ausência é limitação registrada, não aprovação — CPU e latência aqui são wall-clock de bancada sobre o buffer, e nenhum DAC foi medido |
 
 ## DoD — pronto para review
@@ -84,10 +84,12 @@ executada: não havia o que executar" — era verdade então, e deixou de ser: a
 código, testes e medição. Esta nota substitui aquela, e não a apaga do histórico: o
 `git log` preserva as duas.
 
-| AC | Verificação executada | Resultado |
+Esta tabela mede os dois critérios de aceite da TASK do §"Critérios de aceite":
+
+| Critério | Verificação executada | Resultado |
 |---|---|---|
-| `TASK-E04-02-AC-1` | `cargo test --locked` em `vynamp-dsp` — `tests/resample.rs`, 10 testes; mais `cargo run --release --bin measure` | Impulso, sweep, alias, CPU e latência medidos e registrados. Alias −94,4 dB (`balanced`) e −128,4 dB (`high`) no pior par, contra alvos de 80 e 110. 18 pares de taxa × 2 modos, com taps, latência, CPU e MAC/s por linha, na [evidência](https://github.com/jimmykedlyn/vynamp/blob/develop/evidence/PR/task-e04-02/README.md) |
-| `TASK-E04-02-AC-2` | `tests/convert.rs`, 9 testes; `tests/allocation.rs`, 2 testes | Bypass inteiro bit a bit nas três profundidades; dither só ao reduzir precisão, com o estado do gerador provadamente intacto ao subir. Zero alocações depois da construção |
+| `AC-1` | `cargo test --locked` em `vynamp-dsp` — `tests/resample.rs`, 10 testes; mais `cargo run --release --bin measure` | Impulso, sweep, alias, CPU e latência medidos e registrados. Alias −94,4 dB (`balanced`) e −128,4 dB (`high`) no pior par, contra alvos de 80 e 110. 18 pares de taxa × 2 modos, com taps, latência, CPU e MAC/s por linha, na [evidência](https://github.com/jimmykedlyn/vynamp/blob/develop/evidence/PR/task-e04-02/README.md) |
+| `AC-2` | `tests/convert.rs`, 9 testes; `tests/allocation.rs`, 2 testes | Bypass inteiro bit a bit nas três profundidades; dither só ao reduzir precisão, com o estado do gerador provadamente intacto ao subir. Zero alocações depois da construção |
 
 `cargo test --all --locked` → **21 passed, 0 failed, 6 suites**. `cargo fmt --all
 --check` limpo; `cargo clippy --all-targets -- -D warnings` sem issues. Nenhum teste
