@@ -7,8 +7,8 @@
 | Tipo | lib |
 | Versão da spec | 0.2.0 |
 | Data | 2026-11-11 |
-| Estado | **rascunho autorado pelo spike, não aprovado** — §3, §5, §6, §9 e §10 escritos a partir da [ADR-017](https://github.com/jimmykedlyn/vynamp/blob/develop/adr/ADR-017-resampler-e-conversao.md) e do código da TASK-E04-02; §4 continua a autorar. A aprovação é do mantenedor, por `GOVERNANCE.md` |
-| Dono | a definir |
+| Estado | **rascunho autorado pelo spike, não aprovado** — §3, §5, §6, §9 e §10 escritos a partir da [ADR-017](https://github.com/jimmykedlyn/vynamp/blob/develop/adr/ADR-017-resampler-e-conversao.md) e do código da TASK-E04-02; §4 autorado em 2026-11-11. A aprovação é do mantenedor, por `GOVERNANCE.md` |
+| Dono | mantenedor do `vynamp-dsp` |
 | Depende de | nada — esta lib e a base da pilha |
 | É dependido por | engine (obrigatorio); output e encode (opcionais, feature `resample`); restore |
 
@@ -19,7 +19,7 @@
 > esta spec cita a ADR e não repete os valores, para não haver duas verdades.
 > **Estar escrito não é estar aprovado:** a Boundary da TASK-E04-02 proíbe o spike de
 > aprovar esta spec, e quem move o estado para `aprovada` é o mantenedor, por
-> `GOVERNANCE.md` §"Changing this document". §4 continua a autorar.
+> `GOVERNANCE.md` §"Changing this document".
 
 ## 1. Propósito
 
@@ -133,8 +133,28 @@ aritmética inteira, e a média é zero.
 
 ## 4. Requisitos
 
-PENDENTE — cada requisito com ID estável `DSP-REQ-nn` e REQ de produto,
-rastreável até uma TASK e um teste.
+> Autorado em 2026-11-11 a partir do código e dos testes da TASK-E04-02. **Não
+> aprovado.** Cada requisito aponta para o critério de §5 que o prova; `planned`
+> marca o que o §1 promete e esta entrega ainda não tem.
+
+| ID | Requisito | REQ de produto | TASK | Onde é provado |
+|---|---|---|---|---|
+| DSP-REQ-01 | Taxa igual é bypass bit a bit, com latência 0. — implemented | REQ de saída bit-perfect | E04-02 | DSP-AC-01 |
+| DSP-REQ-02 | O resampler preserva ganho DC e alinha o impulso à posição ideal. — implemented | REQ de reprodução fiel | E04-02 | DSP-AC-02, DSP-AC-03 |
+| DSP-REQ-03 | Dois modos, `Balanced` e `High`, com passband, rejeição de alias e ripple da ADR-017 §2. — implemented | REQ de reprodução fiel | E04-02 | DSP-AC-04, DSP-AC-05 |
+| DSP-REQ-04 | Taps e latência publicados batem com a ADR e com o que o fluxo retém; a contagem de frames segue a razão de taxas. — implemented | REQ de sincronia e gapless | E04-02 | DSP-AC-06, DSP-AC-07, `frame_count_follows_the_rate_ratio` |
+| DSP-REQ-05 | O estado entre blocos é preservado: dividir o bloco não muda a saída. — implemented | REQ de reprodução fiel | E04-02 | DSP-AC-08 |
+| DSP-REQ-06 | Conversão de profundidade em container `i32` com bits válidos no topo; alargar zera os bits baixos. — implemented | REQ de saída bit-perfect | E04-02 | DSP-AC-10, `packing_16bit_occupies_the_top_of_the_container`, `packing_24bit_occupies_the_top_of_the_container` |
+| DSP-REQ-07 | Dither TPDF determinístico, só ao reduzir precisão, nunca em mesma profundidade. — implemented | REQ de saída bit-perfect | E04-02 | DSP-AC-09, DSP-AC-11, DSP-AC-12 |
+| DSP-REQ-08 | Redução de profundidade satura sem trocar de sinal e é monótona. — implemented | REQ de reprodução fiel | E04-02 | DSP-AC-13, DSP-AC-14 |
+| DSP-REQ-09 | Zero alocação no caminho quente depois de `new`. — implemented | REQ de reprodução sem falhas (tempo real) | E04-02 | DSP-AC-16 |
+| DSP-REQ-10 | Erro é dado: nenhuma entrada provoca `panic!` e a instância segue utilizável. — implemented | REQ de robustez | E04-02 | DSP-AC-15, DSP-AC-17 |
+| DSP-REQ-11 | Mapa de canais. — planned (M2) | REQ de saída multicanal | E01-09 | — |
+| DSP-REQ-12 | Mixer, ganho, fade e crossfade. — planned (M3) | REQ de gapless e crossfade | E01-05, E04-01, E04-03 | — |
+| DSP-REQ-13 | Noise shaping sobre o TPDF. — planned (M5) | REQ de saída bit-perfect | — | — |
+
+Os rótulos de REQ de produto são descritivos; trocar cada um pelo ID formal do
+documento de requisitos do umbrella faz parte da aprovação.
 
 ## 5. Critérios de aceite
 
