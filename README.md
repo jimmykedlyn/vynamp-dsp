@@ -5,9 +5,14 @@
 Signal primitives in Rust, `std` only, with no crates.io dependencies: resampler,
 dither, channel mapping, mixer, gain and crossfade.
 
-> **Status: specification.** This library is not implemented. The repository holds the
-> module specification, its task list and the tooling both are built with. It ships no
-> running code and makes no measured claim.
+> **Status: spike, M0.** Two of the module's primitives are implemented and measured:
+> a rational-phase Kaiser-windowed resampler (`balanced` and `high`) and depth
+> conversion with TPDF dither. The numbers behind the quality targets are in
+> [ADR-017](https://github.com/jimmykedlyn/vynamp/blob/develop/adr/ADR-017-resampler-e-conversao.md)
+> and the evidence behind them in
+> [TASK-E04-02](https://github.com/jimmykedlyn/vynamp/blob/develop/evidence/PR/task-e04-02/README.md).
+> Channel mapping, mixer, gain and crossfade are **not** implemented, and no audio
+> device has been touched — CPU and latency are bench wall-clock over buffers.
 
 Licence: `MIT OR Apache-2.0` — see [LICENSE](LICENSE), [LICENSE-MIT](LICENSE-MIT) and
 [LICENSE-APACHE](LICENSE-APACHE).
@@ -47,9 +52,14 @@ unreviewed dependency.
 Primitivas de sinal em Rust, só `std`, sem dependências do crates.io: resampler,
 dither, mapeamento de canal, mixer, ganho e crossfade.
 
-> **Estado: especificação.** Esta biblioteca não está implementada. O repositório contém
-> a especificação do módulo, a lista de tarefas dele e o tooling com que os dois são
-> construídos. Não entrega código em execução e não afirma resultado medido.
+> **Estado: spike de M0.** Duas primitivas do módulo estão implementadas e medidas: um
+> resampler de fase racional com janela de Kaiser (`balanced` e `high`) e conversão de
+> profundidade com dither TPDF. Os números por trás dos alvos de qualidade estão na
+> [ADR-017](https://github.com/jimmykedlyn/vynamp/blob/develop/adr/ADR-017-resampler-e-conversao.md)
+> e a evidência deles na
+> [TASK-E04-02](https://github.com/jimmykedlyn/vynamp/blob/develop/evidence/PR/task-e04-02/README.md).
+> Mapa de canais, mixer, ganho e crossfade **não** estão implementados, e nenhum
+> dispositivo de áudio foi tocado — CPU e latência são wall-clock de bancada.
 
 Licença: `MIT OR Apache-2.0` — ver [LICENSE](LICENSE), [LICENSE-MIT](LICENSE-MIT) e
 [LICENSE-APACHE](LICENSE-APACHE).
